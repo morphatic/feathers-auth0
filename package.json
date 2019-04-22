@@ -14,7 +14,7 @@
     "release:patch": "npm version patch && npm publish --access public",
     "release:minor": "npm version minor && npm publish --access public",
     "release:major": "npm version major && npm publish --access public",
-    "test": "npm run eslint && npm run mocha",
+    "test": "npm run eslint && nyc npm run mocha",
     "watch": "mocha --watch --recursive './test/**/*.test.js'"
   },
   "repository": {

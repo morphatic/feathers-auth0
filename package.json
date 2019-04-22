@@ -8,13 +8,14 @@
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "eslint": "eslint lib/. test/. --config .eslintrc.json",
-    "mocha": "mocha --watch --recursive './test/**/*.test.js'",
+    "mocha": "mocha --recursive './test/**/*.test.js'",
     "publish": "git push origin --tags && npm run changelog && git push origin",
     "release:pre": "npm version prerelease && npm publish --tag pre",
     "release:patch": "npm version patch && npm publish --access public",
     "release:minor": "npm version minor && npm publish --access public",
     "release:major": "npm version major && npm publish --access public",
-    "test": "npm run eslint && npm run mocha"
+    "test": "npm run eslint && npm run mocha",
+    "watch": "mocha --watch --recursive './test/**/*.test.js'"
   },
   "repository": {
     "type": "git",

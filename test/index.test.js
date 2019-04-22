@@ -351,7 +351,7 @@ describe('The FeathersJS Auth0 Management API Service', () => {
         patched_user = merge(patched_user, data)
         patched_users = JSON.parse(JSON.stringify(db.filter(u => u.last_login < '2019-06-03T00:00:00.000Z')))
         patched_users = patched_users.map(u => merge(u, data))
-        console.log(inspect(patched_users.length, false, null, true)) // eslint-disable-line
+        // console.log(inspect(patched_users.length, false, null, true)) // eslint-disable-line
       })
 
 

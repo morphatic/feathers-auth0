@@ -1,0 +1,14 @@
+{
+  "auth0options": {
+    "domain": "example.auth0.com",
+    "clientId": "your_client_id",
+    "clientSecret": "your_client_secret"
+  },
+  "owasp": {
+    "allowPassphrases": true,
+    "maxLength": 128,
+    "minLength": 15,
+    "minPhraseLength": 20,
+    "minOptionalTestsToPass": 4
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "name": "@morphatic/feathers-auth0",
+  "version": "0.0.0",
+  "private": false,
+  "description": "A FeathersJS service adapter for Auth0.",
+  "main": "lib/",
+  "scripts": {
+    "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "eslint": "eslint lib/. test/. --config .eslintrc.json",
+    "mocha": "mocha --watch --recursive './test/**/*.test.js'",
+    "publish": "git push origin --tags && npm run changelog && git push origin",
+    "release:pre": "npm version prerelease && npm publish --tag pre",
+    "release:patch": "npm version patch && npm publish --access public",
+    "release:minor": "npm version minor && npm publish --access public",
+    "release:major": "npm version major && npm publish --access public",
+    "test": "npm run eslint && npm run mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morphatic/feathers-auth0.git"
+  },
+  "keywords": [
+    "feathers",
+    "feathers-plugin",
+    "adapter",
+    "auth0"
+  ],
+  "author": "Morgan Benton <morgan.benton@gmail.com> (https://morphatic.com)",
+  "contributors": [],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/morphatic/feathers-auth0/issues"
+  },
+  "homepage": "https://github.com/morphatic/feathers-auth0#readme",
+  "devDependencies": {
+    "@feathersjs/configuration": "^2.0.6",
+    "@feathersjs/feathers": "^3.3.1",
+    "chai": "^4.2.0",
+    "chance": "^1.0.18",
+    "deep-equal": "^1.0.1",
+    "eslint": "^5.16.0",
+    "faker": "^4.1.0",
+    "json-schema-faker": "^0.5.0-rc16",
+    "mocha": "^6.1.3",
+    "nyc": "^14.0.0"
+  },
+  "dependencies": {
+    "@feathersjs/adapter-commons": "^2.0.0",
+    "@feathersjs/errors": "^3.3.6",
+    "auth0": "^2.17.0",
+    "deepmerge": "^3.2.0",
+    "fast-sort": "^1.5.6",
+    "jsonwebtoken": "^8.5.1",
+    "lodash.get": "^4.4.2",
+    "owasp-password-strength-test": "^1.3.0"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}

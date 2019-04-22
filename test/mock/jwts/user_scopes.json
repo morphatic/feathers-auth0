@@ -1,0 +1,18 @@
+{
+  "header": {
+    "typ": "JWT",
+    "alg": "RS256",
+    "kid": "DEA0771072FA1B68B78BD44DEE41AB04"
+  },
+  "payload": {
+    "iss": "https://example.auth0.com/",
+    "sub": "043A1DC4BAC5D0F1EFD5FAF2D28D685F@clients",
+    "aud": "https://example.auth0.com/api/v2/",
+    "iat": 1555456932,
+    "exp": 1871076666,
+    "azp": "043A1DC4BAC5D0F1EFD5FAF2D28D685F",
+    "scope": "read:users update:users delete:users create:users read:users_app_metadata update:users_app_metadata delete:users_app_metadata create:users_app_metadata create:user_tickets read:stats",
+    "gty": "client-credentials"
+  },
+  "signature": "qXqkWksQgIbqeW5qX-lzzoZZluU51RUHExfy65e5Hab2JKdQCEr4vmIr4JV6b0e1KgN4eOev9r9czMX5LG3eRMA8y84rZCiK823xFsblO-CM3Jhf0weKCVSU9YmZ6ZvEq0t8PvMeXIDT1qDNNjT-xnr0s0lI2QdsTVW9i3b6Jv2MzHtMtb0BLXOBMuEvqOQu-hcgyR7xH_eFOgFoOeimWLSW1t-oH14r6T8cpdaOi_P82P2Tfl3G07Gm0cnnvMmpJPmaL02kXwtlE_jK-pgmx-c2las_qtSAQ06DVzUqzb7T_2krpIQs3nWfQXCaJBhp9fR6DNs4ZxLvL_OroQISLw"
+}

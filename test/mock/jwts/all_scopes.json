@@ -1,0 +1,18 @@
+{
+  "header": {
+    "typ": "JWT",
+    "alg": "RS256",
+    "kid": "DEA0771072FA1B68B78BD44DEE41AB04"
+  },
+  "payload": {
+    "iss": "https://example.auth0.com/",
+    "sub": "043A1DC4BAC5D0F1EFD5FAF2D28D685F@clients",
+    "aud": "https://example.auth0.com/api/v2/",
+    "iat": 1555456932,
+    "exp": 1871076666,
+    "azp": "043A1DC4BAC5D0F1EFD5FAF2D28D685F",
+    "scope": "read:client_grants create:client_grants delete:client_grants update:client_grants read:users update:users delete:users create:users read:users_app_metadata update:users_app_metadata delete:users_app_metadata create:users_app_metadata create:user_tickets read:clients update:clients delete:clients create:clients read:client_keys update:client_keys delete:client_keys create:client_keys read:connections update:connections delete:connections create:connections read:resource_servers update:resource_servers delete:resource_servers create:resource_servers read:device_credentials update:device_credentials delete:device_credentials create:device_credentials read:rules update:rules delete:rules create:rules read:rules_configs update:rules_configs delete:rules_configs read:email_provider update:email_provider delete:email_provider create:email_provider blacklist:tokens read:stats read:tenant_settings update:tenant_settings read:logs read:shields create:shields delete:shields read:anomaly_blocks delete:anomaly_blocks update:triggers read:triggers read:grants delete:grants read:guardian_factors update:guardian_factors read:guardian_enrollments delete:guardian_enrollments create:guardian_enrollment_tickets read:user_idp_tokens create:passwords_checking_job delete:passwords_checking_job read:custom_domains delete:custom_domains create:custom_domains read:email_templates create:email_templates update:email_templates read:mfa_policies update:mfa_policies read:roles create:roles delete:roles update:roles",
+    "gty": "client-credentials"
+  },
+  "signature": "H2BSX4b5bpXuvda6KwtaPTPhbNc2x5M_8kzdSbIiLYeKExtaKP4mIoV4GmtdQkL6nm1EJra38WOWXUeinhr2ZveYbCAJdgLJcuLlxscCoCsRIw4qrrUjyCZ-HdyrZtXspLKcyR__fwbicqtB4SsFvqPY4C1-Fc11hyZa-_aC4IoSRYnYRRSQuuJFBLQVo6aJ8iwympRA65KnbEj3Vc9o3pkypIxuuH4rDRsAqAYzMAVFZU4ka6SfSgSGjY75avM_tOOIS3HK1WE5Fz7vqLUj2Y5f7rZMbUBlmIEcJo6jTv_nInEfTIPztlgAKVCmkYzaBe8juwkiE7fjEcyZgppYSQ"
+}

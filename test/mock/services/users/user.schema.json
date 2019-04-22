@@ -1,0 +1,332 @@
+{
+  "id": "auth0user",
+  "title": "User",
+  "type": "object",
+  "description": "A valid Auth0 user",
+  "properties": {
+    "app_metadata": {
+      "type": "object",
+      "description": "Arbitrary, user-related metadata that is NOT editable by the user, e.g. roles",
+      "properties": {
+        "roles": {
+          "type": "array",
+          "description": "User roles for this user, e.g. `member`, `admin`, etc.",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {
+            "enum": [
+              "member",
+              "admin"
+            ]
+          }
+        }
+      },
+      "not": {
+        "required": [
+          "__tenant",
+          "_id",
+          "blocked",
+          "clientID",
+          "created_at",
+          "email",
+          "email_verified",
+          "globalClientID",
+          "global_client_id",
+          "identities",
+          "lastIP",
+          "lastLogin",
+          "loginsCount",
+          "metadata",
+          "multifactor_last_modified",
+          "multifactor",
+          "updated_at",
+          "user_id"
+        ]
+      }
+    },
+    "blocked": {
+      "type": "boolean",
+      "description": "Is the user currently blocked?",
+      "default": false
+    },
+    "blocked_for": {
+      "type": "array",
+      "description": "An array of identifier/IP address combos that are blocked",
+      "items": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "description": "Can be the user's email address, username, user_id, or phone number"
+          },
+          "ip_address": {
+            "type": "string",
+            "description": "The blocked IP address",
+            "format": "ipv4"
+          }
+        },
+        "required": [
+          "identifier",
+          "ip_address"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "created_at": {
+      "type": "string",
+      "description": "The ISO8601 datetime when the user was created",
+      "format": "date-time",
+      "faker": {
+        "iso8601.between": [
+          "2018-01-01",
+          "2018-06-30"
+        ]
+      }
+    },
+    "email": {
+      "type": "string",
+      "description": "This is a unique identifier that can be used to get() a user",
+      "format": "email",
+      "faker": {
+        "internet.email": [
+          "#{given_name}",
+          "#{family_name}",
+          "gmail.com"
+        ]
+      }
+    },
+    "email_verified": {
+      "type": "boolean",
+      "description": "Has the user verified that their email is valid",
+      "default": false
+    },
+    "family_name": {
+      "type": "string",
+      "description": "Typically the users's last name. Not set by all providers, e.g. Auth0.",
+      "faker": "name.lastName"
+    },
+    "gender": {
+      "type": "string",
+      "description": "Theoretically the user's gender. Set by some social providers, e.g. Google.",
+      "pattern": "male|female"
+    },
+    "given_name": {
+      "type": "string",
+      "description": "Typically the users's first name. Not set by all providers, e.g. Auth0.",
+      "faker": "name.firstName"
+    },
+    "guardian_authenticators": {
+      "type": "array",
+      "description": "Guardians are services associated with MFA, e.g. duo, email, sms",
+      "items": {
+        "type": "object",
+        "description": "A guardian factor (authenticator)",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "From the enum: duo, email, otp, push_notifications, sms"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Is this guardian enabled?"
+          },
+          "is_trial_expired": {
+            "type": "boolean",
+            "description": "Is the trial period expired? (not sure what this means)"
+          }
+        },
+        "required": [
+          "name",
+          "enabled",
+          "is_trial_expired"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "identities": {
+      "type": "array",
+      "description": "All of the identities associated with the user, e.g. Auth0, Google, Facebook, etc.",
+      "minItems": 1,
+      "maxItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/definitions/identity"
+      }
+    },
+    "last_ip": {
+      "type": "string",
+      "description": "The IP address from which the user last logged in",
+      "format": "ipv4"
+    },
+    "last_login": {
+      "type": "string",
+      "description": "The ISO8601 datetime when the user last logged in",
+      "format": "date-time",
+      "faker": {
+        "iso8601.between": [
+          "2019-06-01",
+          "2019-06-30"
+        ]
+      }
+    },
+    "last_password_reset": {
+      "type": "string",
+      "description": "The ISO8601 datetime when the user last reset their password",
+      "format": "date-time",
+      "faker": {
+        "iso8601.between": [
+          "2018-01-01",
+          "2019-06-30"
+        ]
+      }
+    },
+    "locale": {
+      "type": "string",
+      "description": "ISO 639-1 code associated with user's preferred locale, e.g.",
+      "pattern": "en|es|fr|ja|de|zh"
+    },
+    "logins_count": {
+      "type": "number",
+      "description": "The number of times the user has logged in",
+      "minimum": 0,
+      "default": 0,
+      "chance": {
+        "integer": {
+          "min": 0,
+          "max": 1000
+        }
+      }
+    },
+    "multifactor": {
+      "type": "array",
+      "description": "The list of multi-factor providers in which the user is enrolled",
+      "minItems": 0,
+      "items": {
+        "type": "string"
+      }
+    },
+    "name": {
+      "type": "string",
+      "description": "Set by provider. Auth0 uses email, Google the first and last names, not sure about others...",
+      "faker": {
+        "fake": "#{given_name} #{family_name}"
+      }
+    },
+    "nickname": {
+      "type": "string",
+      "description": "Set to the part of the email address before the @ symbol",
+      "faker": {
+        "fake": "#{given_name}"
+      }
+    },
+    "password_set_date": {
+      "type": "string",
+      "description": "The ISO8601 datetime when the user set their password; may be identical to `last_password_reset`",
+      "format": "date-time",
+      "faker": {
+        "fake": "#{last_password_reset}"
+      }
+    },
+    "phone_number": {
+      "type": "string",
+      "description": "This user's phone number, typically only available if SMS is used for MFA",
+      "chance": "phone"
+    },
+    "phone_verified": {
+      "type": "boolean",
+      "description": "Has the user verified that their `phone_number` is valid?",
+      "default": false
+    },
+    "picture": {
+      "type": "string",
+      "description": "A URL that points to a profile picture or avatar. Defaults to gravatar.",
+      "format": "uri",
+      "faker": {
+        "image.imageUrl": [
+          60,
+          60,
+          "people"
+        ]
+      }
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "The ISO8601 datetime when the user was updated",
+      "format": "date-time",
+      "faker": {
+        "iso8601.between": [
+          "2019-04-01",
+          "2019-05-31"
+        ]
+      }
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Format is `provider|user_id` from 'identities' array of method used for first login"
+    },
+    "user_metadata": {
+      "type": "object",
+      "description": "Arbitrary, user-related metadata that is editable by the user, e.g. profile info"
+    },
+    "username": {
+      "type": "string",
+      "description": "The user's unique username (not typically set)",
+      "faker": {
+        "fake": "#{given_name}#{family_name}"
+      }
+    }
+  },
+  "required": [
+    "given_name",
+    "family_name",
+    "email",
+    "email_verified",
+    "identities"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "identity": {
+      "type": "object",
+      "description": "Contains a provider, user_id, connection type, and whether or not it is a 'social' provider",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "A unique identifier generated by the provider",
+          "chance": {
+            "hash": {
+              "length": 24
+            }
+          }
+        },
+        "provider": {
+          "type": "string",
+          "description": "The entity that provided the associated user_id, e.g. auth0, google, facebook, etc.",
+          "pattern": "auth0|google-oauth2"
+        },
+        "connection": {
+          "type": "string",
+          "description": "How authentication occurs, e.g. OAuth2, username/password, etc.",
+          "faker": {
+            "connection": "#{provider}"
+          }
+        },
+        "isSocial": {
+          "type": "boolean",
+          "description": "Was this user_id issued by a 'social' provider, e.g. Google, Facebook, Twitter, GitHub, etc.",
+          "faker": {
+            "isSocial": "#{provider}"
+          }
+        }
+      },
+      "required": [
+        "user_id",
+        "provider",
+        "connection",
+        "isSocial"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

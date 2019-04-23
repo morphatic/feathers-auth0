@@ -10,3 +10,4 @@ coverage/
 .github/
 .nyc_output
 .eslintrc.json
+config/

@@ -14,7 +14,13 @@ module.exports = function (creds) {
 
   return {
     tokenProvider: {
-      getAccessToken: () => Promise.resolve(mockToken)
+      getAccessToken: () => {
+        if (creds.clientSecret === 'a_bad_secret') {
+          throw Error('Something bad happened')
+        } else {
+          return Promise.resolve(mockToken)
+        }
+      }
     },
     ...userService
   }

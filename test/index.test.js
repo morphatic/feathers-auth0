@@ -45,6 +45,20 @@ describe('The FeathersJS Auth0 Management API Service', () => {
     }
   })
 
+  it('throws an error if the token cannot be retrieved', async () => {
+    app.set('auth0options', {
+      domain: 'example.auth0.com',
+      clientId: 'your_client_id',
+      clientSecret: 'a_bad_secret'
+    })
+    try {
+      // initialize the Auth0 Management client
+      await app.configure(adapter({ auth0Client: mockAuth0Client }))
+    } catch (err) {
+      expect(err.message).to.equal('Could not get access token and set scopes.')
+    }
+  })
+
   it('sets the Auth0 scopes correctly', async () => {
     app.set('auth0options', {
       domain: 'example.auth0.com',

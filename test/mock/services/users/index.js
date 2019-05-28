@@ -87,7 +87,7 @@ module.exports = {
     return Promise.reject('None of the test queries matched.')
   },
   getUsersByEmail: email => Promise.resolve(db.filter(u => u.email === email)),
-  getUser: id => Promise.resolve(db.filter(u => u.user_id === id.id)),
+  getUser: id => Promise.resolve(db.filter(u => u.user_id === id.id)[0]),
   createUser: data => {
     delete data.password
     delete data.verify_email

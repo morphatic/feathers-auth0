@@ -8,6 +8,10 @@
 
 Creates the services necessary to use the [Auth0 Management API](https://auth0.com/docs/api/management/v2) with [FeathersJS](https://feathersjs.com).
 
+:warning: **This package is designed to work with the [FeatherJS v4.0 (Crow)](https://crow.docs.feathersjs.com/), currently (2019-08-02) in pre-release.** :warning:
+
+This package will **probably** work with older versions of FeathersJS, but if all you need is the Users API, you can install version 0.1.4.
+
 ## Installation
 
 Installation is a 3-step process. First, add the package as a dependency to your FeathersJS project:
@@ -26,12 +30,10 @@ Then, update `src/app.js` to include and configure it:
 const auth0 = require('@morphatic/feathers-auth0')
 
 // ... other configuration ...
-// if you're using the feathers-plus generators,
+
 // add it in the middleware configuration section
 
-// !code: config_middle
 app.configure(auth0())
-// !end
 
 // in any case, it should come BEFORE the 404 handler
 app.use(express.notFound()) // <-- BEFORE this line
@@ -61,7 +63,7 @@ Note, that this package depends upon the [`owasp-password-strength-test`](https:
 
 ## :warning: Secure your API!!! :warning:
 
-Out of the box, this plugin does **_NOT_** include any functionality that would restrict who or what can access your API endpoints. Therefore it is absolutely critical that you make sure you implement some sort of access control to your API. As a suggestion, you might use [`@morphatic/feathers-auth0-authorize-hook`](https://www.npmjs.com/package/@morphatic/feathers-auth0-authorize-hook), but you should always use _something_.
+Out of the box, this plugin does **_NOT_** include any functionality that would restrict who or what can access your API endpoints. Therefore it is absolutely critical that you make sure you implement some sort of access control to your API. As a suggestion, you might use [`@morphatic/feathers-auth0-strategy`](https://www.npmjs.com/package/@morphatic/feathers-auth0-strategy), but you should always use _something_.
 
 ## Usage
 
@@ -100,9 +102,38 @@ By using `app.service('/auth0/users')`, one can `find()`, `get()`, `create()`, `
 * **`$limit: 0`**<br>Auth0 does not have query syntax that allows replication of the fast count that would normally be returned by setting `$limit: 0` on a Feathers query. The result is just a normal page of results with zero results, but the overall total number of records is listed.
 * **Multi**<br>By default, you **_cannot_** `patch()` or `remove()` multiple records at one time. If you would like to be able to do so, you need to alter your configuration as follows. In `src/app.js` when you make the call to `app.configure(auth0())` (as described above), you need to pass an object that has `multi` set to `true` or as an array of strings that contains either `patch`, `remove` or both, i.e. `app.configure(auth0({multi: true}))` or `app.configure(auth0({multi: ['patch']}))`. You can pass other configuration settings [as described in the Feathers `service` docs](https://crow.docs.feathersjs.com/api/databases/common.html). This setting cannot be altered from the client side. An error will be thrown if a client tries to perform an `patch()` or `remove()` operation on more than one record when `multi` has not been enabled.
 
+### Tickets Endpoint
+
+By using `app.service('/auth0/tickets')`, one can `create()` requests to reset users' passwords and (re)send the email verification email that is sent out when a person first signs up for your app. None of the other Feathers API functions are implemented for the `tickets` service as they do not match to any Auth0 API functionality.
+
+The `data` parameter of the `create()` function typically is just an object containing the `user_id` of the user for whom the password is being reset or who needs to have the email verification message sent again. The `params` parameter of the `create()` function must contain a `type` property that has a value of either `password_reset` or `email_verification` to let the API know what kind of ticket should be created. For example:
+
+```js
+// get the user_id of, e.g., the currently logged in user
+const user_id = this.$store.state.auth.user.user_id
+
+// make a password reset request from the client
+// this results in a password reset email being sent to the user's email address
+try {
+  await api.service('/auth0/tickets').create({ user_id }, { type: 'password_reset' })
+} catch (error) {
+  // errors are thrown, e.g., if the user_id is not found
+  console.log(error)
+}
+
+// make an email verification request
+// this results in an email verification link being sent to the user's email address
+try {
+  await api.service('/auth0/tickets').create({ user_id }, { type: 'email_verification' })
+} catch (error) {
+  // errors are thrown, e.g., if the user_id is not found
+  console.log(error)
+}
+```
+
 ### Other Endpoints
 
-At this time, no other endpoints have been implemented. In order of priority, the next endpoint that is planned for implementation is the `tickets` endpoint for sending email verification and password reset emails to users. Other endpoints will be added on an "as needed" or "as requested" basis. Pull requests are always welcome.
+At this time, no other endpoints have been implemented. In order of priority, the next endpoint that is planned for implementation is the `jobs` endpoint for batch import/export of users. Other endpoints will be added on an "as needed" or "as requested" basis. Pull requests are always welcome.
 
 ## Questions, Comments, Feedback
 

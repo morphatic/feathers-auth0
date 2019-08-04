@@ -1,6 +1,6 @@
 {
   "name": "@morphatic/feathers-auth0",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "private": false,
   "description": "A FeathersJS service adapter for Auth0.",
   "main": "lib/",

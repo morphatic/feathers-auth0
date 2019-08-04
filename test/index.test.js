@@ -21,17 +21,17 @@ describe('The FeathersJS Auth0 Management API Service', () => {
     app.set('paginate', { default: 10, max: 50 })
   })
 
-  it('throws an error if the credentials are missing', async () => {
+  it('throws an error if the credentials are missing', () => {
     app.set('auth0options', undefined)
     try {
       // initialize the Auth0 Management client
-      await app.configure(adapter({ auth0Client: mockAuth0Client }))
+      app.configure(adapter({ auth0Client: mockAuth0Client }))
     } catch (err) {
       expect(err.message).to.equal('Auth0 Management Client credentials have not been set correctly.')
     }
   })
 
-  it('throws an error if the credentials are not correct', async () => {
+  it('throws an error if the credentials are not correct', () => {
     app.set('auth0options', {
       domain: 'bad.domain.com',
       clientId: 'your_client_id',
@@ -39,13 +39,13 @@ describe('The FeathersJS Auth0 Management API Service', () => {
     })
     try {
       // initialize the Auth0 Management client
-      await app.configure(adapter({ auth0Client: mockAuth0Client }))
+      app.configure(adapter({ auth0Client: mockAuth0Client }))
     } catch (err) {
       expect(err.message).to.equal('Could not create Auth0 Management client.')
     }
   })
 
-  it('throws an error if the token cannot be retrieved', async () => {
+  it('throws an error if the token cannot be retrieved', () => {
     app.set('auth0options', {
       domain: 'example.auth0.com',
       clientId: 'your_client_id',
@@ -53,21 +53,39 @@ describe('The FeathersJS Auth0 Management API Service', () => {
     })
     try {
       // initialize the Auth0 Management client
-      await app.configure(adapter({ auth0Client: mockAuth0Client }))
+      app.configure(adapter({ auth0Client: mockAuth0Client }))
     } catch (err) {
       expect(err.message).to.equal('Could not get access token and set scopes.')
     }
   })
 
+  /**
+   * In general, Feathers adapters do not rely upon asynchronous
+   * code during initialization. However, in order to determine
+   * the scopes available to the ManagementClient API corresponding
+   * to the client ID/secret set in the configuration for this
+   * package, we have to make one async call to getAccessToken().
+   * This only happens once when the Feathers server is first being
+   * started up. As long is there is at least a second or two from
+   * the server starting until the first Auth0 API request, there
+   * will be enough time to retrieve the scopes. To simulate this
+   * lag time during testing, we inject a sleep function that puts
+   * a 10ms delay between app configuration and checking to see if
+   * the scopes have been set or not. That's why there's a sleep
+   * function tucked inside of this test. In practical scenarios
+   * this sleep function is not necessary.
+   */
   it('sets the Auth0 scopes correctly', async () => {
     app.set('auth0options', {
       domain: 'example.auth0.com',
       clientId: 'your_client_id',
       clientSecret: 'your_client_secret'
     })
-    await app.configure(adapter({ auth0Client: mockAuth0Client }))
+    app.configure(adapter({ auth0Client: mockAuth0Client }))
+    await new Promise(resolve => setTimeout(resolve, 10)) // sleep for 10ms
     const scopes = allScopesJWT.payload.scope.split(' ')
-    expect(scopes).to.deep.equal(app.get('auth0Scopes'))
+    const auth0Scopes = app.get('auth0Scopes')
+    expect(scopes).to.deep.equal(auth0Scopes)
   })
 
   describe('User Manager', () => {
@@ -613,6 +631,156 @@ describe('The FeathersJS Auth0 Management API Service', () => {
         expect(result).to.deep.equal(removed_users)
         // set the setting back to what they were
         userService.multi = multi
+      })
+    })
+  })
+
+  describe('Tickets Manager', () => {
+    let ticketsService
+    before(() => {
+      // configure the tickets service
+      ticketsService = app.service('/auth0/tickets')
+    })
+
+    describe('find()', () => {
+      it('will throw a NotImplemented error', async () => {
+        let message
+        try {
+          await ticketsService.find()
+        } catch (err) { message = err.message }
+        expect(message).to.equal(
+          'The `auth0/tickets` service has no find() method. Use create(data, { type: \'email_verification|password_reset\' instead.'
+        )
+      })
+    })
+
+    describe('create()', () => {
+      it('will throw an error if the appropriate scopes do not exist', async () => {
+        // set app-wide scopes configuration to []
+        const scopes = app.get('auth0Scopes')
+        app.set('auth0Scopes', [])
+        app.setup()
+
+        // run a query
+        let message
+        try {
+          await ticketsService.create({})
+        } catch (err) { message = err.message }
+        expect(message).to.equal('The token must have `create:user_tickets` scope to call this endpoint')
+
+        // reset the app-wide scopes back to what they were
+        app.set('auth0Scopes', scopes)
+        app.setup()
+      })
+
+      it('will throw an error if the request type is not specified', async () => {
+        let msg
+        try { await ticketsService.create({}) } catch (err) { msg = err.message }
+        expect(msg).to.equal('You must specify what kind of ticket to create (email_verification or password_reset).')
+      })
+
+      it('will throw an error for password_reset requests if a user_id is not specified', async () => {
+        let msg
+        try { await ticketsService.create({}, { type: 'password_reset' }) } catch (err) { msg = err.message }
+        expect(msg).to.equal('You must provide a valid user_id.')
+      })
+
+      it('will throw an error for email_verification requests if the user_id is not specified', async () => {
+        let msg
+        try { await ticketsService.create({}, { type: 'email_verification' }) } catch (err) { msg = err.message }
+        expect(msg).to.equal('You must provide a valid user_id.')
+      })
+
+      it('will throw an error for password_reset requests if the user_id does not exist', async () => {
+        let msg
+        try {
+          await ticketsService.create(
+            { user_id: 'auth0|idonotexist'},
+            { type: 'password_reset' }
+          )
+        } catch (err) { msg = err.message }
+        expect(msg).to.equal('The user does not exist.')
+      })
+
+      it('will throw an error for email_verification requests if the user_id does not exist', async () => {
+        let msg
+        try {
+          await ticketsService.create(
+            { user_id: 'auth0|idonotexist'},
+            { type: 'email_verification' }
+          )
+        } catch (err) { msg = err.message }
+        expect(msg).to.equal('The user does not exist.')
+      })
+
+      it('will return `ok` if a valid user_id is passed for password_reset', async () => {
+        let result
+        try {
+          result = await ticketsService.create(
+            { user_id: 'auth0|avaliduser'},
+            { type: 'password_reset' }
+          )
+        } catch (err) { /* noop */ }
+        expect(result).to.equal('ok')
+      })
+
+      it('will return `ok` a valid user_id is passed for email_verification requests', async () => {
+        let result
+        try {
+          result = await ticketsService.create(
+            { user_id: 'auth0|avaliduser'},
+            { type: 'email_verification' }
+          )
+        } catch (err) { /* noop */ }
+        expect(result).to.equal('ok')
+      })
+    })
+
+    describe('get()', () => {
+      it('will throw a NotImplemented error', async () => {
+        let message
+        try {
+          await ticketsService.get('auth0|0123456789')
+        } catch (err) { message = err.message }
+        expect(message).to.equal(
+          'The `auth0/tickets` service has no get() method. Use create(data, { type: \'email_verification|password_reset\' instead.'
+        )
+      })
+    })
+
+    describe('patch()', () => {
+      it('will throw a NotImplemented error', async () => {
+        let message
+        try {
+          await ticketsService.patch('auth0|0123456789', {})
+        } catch (err) { message = err.message }
+        expect(message).to.equal(
+          'The `auth0/tickets` service has no patch() method. Use create(data, { type: \'email_verification|password_reset\' instead.'
+        )
+      })
+    })
+
+    describe('update()', () => {
+      it('will throw a NotImplemented error', async () => {
+        let message
+        try {
+          await ticketsService.update('auth0|0123456789', {})
+        } catch (err) { message = err.message }
+        expect(message).to.equal(
+          'The `auth0/tickets` service has no update() method. Use create(data, { type: \'email_verification|password_reset\' instead.'
+        )
+      })
+    })
+
+    describe('remove()', () => {
+      it('will throw a NotImplemented error', async () => {
+        let message
+        try {
+          await ticketsService.remove('auth0|0123456789')
+        } catch (err) { message = err.message }
+        expect(message).to.equal(
+          'The `auth0/tickets` service has no remove() method. Use create(data, { type: \'email_verification|password_reset\' instead.'
+        )
       })
     })
   })

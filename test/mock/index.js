@@ -4,6 +4,7 @@
  */
 const fs = require('fs')
 const userService = require('./services/users')
+const ticketsService = require('./services/tickets')
 const mockToken = fs.readFileSync(__dirname + '/jwts/all_scopes.jwt', 'utf8')
 
 module.exports = function (creds) {
@@ -16,12 +17,13 @@ module.exports = function (creds) {
     tokenProvider: {
       getAccessToken: () => {
         if (creds.clientSecret === 'a_bad_secret') {
-          throw Error('Something bad happened')
+          return Promise.reject(Error('Something bad happened'))
         } else {
           return Promise.resolve(mockToken)
         }
       }
     },
-    ...userService
+    ...userService,
+    ...ticketsService
   }
 }

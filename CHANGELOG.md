@@ -1,5 +1,15 @@
 # Change Log
 
+## [v0.2.0](https://github.com/morphatic/feathers-auth0/tree/v0.2.0) (2019-08-04)
+[Full Changelog](https://github.com/morphatic/feathers-auth0/compare/v0.1.4...v0.2.0)
+
+**Closed issues:**
+
+- get user by ID incorrectly returns empty object [\#1](https://github.com/morphatic/feathers-auth0/issues/1)
+
+## [v0.1.4](https://github.com/morphatic/feathers-auth0/tree/v0.1.4) (2019-05-28)
+[Full Changelog](https://github.com/morphatic/feathers-auth0/compare/v0.1.3...v0.1.4)
+
 ## [v0.1.3](https://github.com/morphatic/feathers-auth0/tree/v0.1.3) (2019-04-27)
 [Full Changelog](https://github.com/morphatic/feathers-auth0/compare/v0.1.2...v0.1.3)
 

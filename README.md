@@ -115,7 +115,7 @@ const user_id = this.$store.state.auth.user.user_id
 // make a password reset request from the client
 // this results in a password reset email being sent to the user's email address
 try {
-  await api.service('/auth0/tickets').create({ user_id }, { type: 'password_reset' })
+  await api.service('/auth0/tickets').create({ user_id, type: 'password_reset' })
 } catch (error) {
   // errors are thrown, e.g., if the user_id is not found
   console.log(error)
@@ -124,7 +124,7 @@ try {
 // make an email verification request
 // this results in an email verification link being sent to the user's email address
 try {
-  await api.service('/auth0/tickets').create({ user_id }, { type: 'email_verification' })
+  await api.service('/auth0/tickets').create({ user_id, type: 'email_verification' })
 } catch (error) {
   // errors are thrown, e.g., if the user_id is not found
   console.log(error)

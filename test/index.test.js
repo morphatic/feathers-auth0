@@ -681,23 +681,23 @@ describe('The FeathersJS Auth0 Management API Service', () => {
 
       it('will throw an error for password_reset requests if a user_id is not specified', async () => {
         let msg
-        try { await ticketsService.create({}, { type: 'password_reset' }) } catch (err) { msg = err.message }
+        try { await ticketsService.create({ type: 'password_reset' }) } catch (err) { msg = err.message }
         expect(msg).to.equal('You must provide a valid user_id.')
       })
 
       it('will throw an error for email_verification requests if the user_id is not specified', async () => {
         let msg
-        try { await ticketsService.create({}, { type: 'email_verification' }) } catch (err) { msg = err.message }
+        try { await ticketsService.create({ type: 'email_verification' }) } catch (err) { msg = err.message }
         expect(msg).to.equal('You must provide a valid user_id.')
       })
 
       it('will throw an error for password_reset requests if the user_id does not exist', async () => {
         let msg
         try {
-          await ticketsService.create(
-            { user_id: 'auth0|idonotexist'},
-            { type: 'password_reset' }
-          )
+          await ticketsService.create({
+            user_id: 'auth0|idonotexist',
+            type: 'password_reset'
+          })
         } catch (err) { msg = err.message }
         expect(msg).to.equal('The user does not exist.')
       })
@@ -705,10 +705,10 @@ describe('The FeathersJS Auth0 Management API Service', () => {
       it('will throw an error for email_verification requests if the user_id does not exist', async () => {
         let msg
         try {
-          await ticketsService.create(
-            { user_id: 'auth0|idonotexist'},
-            { type: 'email_verification' }
-          )
+          await ticketsService.create({
+            user_id: 'auth0|idonotexist',
+            type: 'email_verification'
+          })
         } catch (err) { msg = err.message }
         expect(msg).to.equal('The user does not exist.')
       })
@@ -716,10 +716,10 @@ describe('The FeathersJS Auth0 Management API Service', () => {
       it('will return `ok` if a valid user_id is passed for password_reset', async () => {
         let result
         try {
-          result = await ticketsService.create(
-            { user_id: 'auth0|avaliduser'},
-            { type: 'password_reset' }
-          )
+          result = await ticketsService.create({
+            user_id: 'auth0|avaliduser',
+            type: 'password_reset'
+          })
         } catch (err) { /* noop */ }
         expect(result).to.equal('ok')
       })
@@ -727,10 +727,10 @@ describe('The FeathersJS Auth0 Management API Service', () => {
       it('will return `ok` a valid user_id is passed for email_verification requests', async () => {
         let result
         try {
-          result = await ticketsService.create(
-            { user_id: 'auth0|avaliduser'},
-            { type: 'email_verification' }
-          )
+          result = await ticketsService.create({
+            user_id: 'auth0|avaliduser',
+            type: 'email_verification'
+          })
         } catch (err) { /* noop */ }
         expect(result).to.equal('ok')
       })

@@ -12,7 +12,7 @@ module.exports = {
       })
     }
   },
-  createEmailVerificationTicket: async data => {
+  sendEmailVerification: async data => {
     const { user_id } = data
     if (user_id === 'auth0|avaliduser') {
       return Promise.resolve('ok')

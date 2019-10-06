@@ -5,7 +5,6 @@ const feathers = require('@feathersjs/feathers')
 const config = require('@feathersjs/configuration')
 const merge = require('deepmerge')
 const mockAuth0Client = require('./mock')
-const allScopesJWT = JSON.parse(fs.readFileSync(__dirname + '/mock/jwts/all_scopes.json', 'utf8'))
 // import the adapter
 const adapter = require('../lib')
 
@@ -59,40 +58,21 @@ describe('The FeathersJS Auth0 Management API Service', () => {
     }
   })
 
-  /**
-   * In general, Feathers adapters do not rely upon asynchronous
-   * code during initialization. However, in order to determine
-   * the scopes available to the ManagementClient API corresponding
-   * to the client ID/secret set in the configuration for this
-   * package, we have to make one async call to getAccessToken().
-   * This only happens once when the Feathers server is first being
-   * started up. As long is there is at least a second or two from
-   * the server starting until the first Auth0 API request, there
-   * will be enough time to retrieve the scopes. To simulate this
-   * lag time during testing, we inject a sleep function that puts
-   * a 10ms delay between app configuration and checking to see if
-   * the scopes have been set or not. That's why there's a sleep
-   * function tucked inside of this test. In practical scenarios
-   * this sleep function is not necessary.
-   */
-  it('sets the Auth0 scopes correctly', async () => {
-    app.set('auth0options', {
-      domain: 'example.auth0.com',
-      clientId: 'your_client_id',
-      clientSecret: 'your_client_secret'
-    })
-    app.configure(adapter({ auth0Client: mockAuth0Client }))
-    await new Promise(resolve => setTimeout(resolve, 10)) // sleep for 10ms
-    const scopes = allScopesJWT.payload.scope.split(' ')
-    const auth0Scopes = app.get('auth0Scopes')
-    expect(scopes).to.deep.equal(auth0Scopes)
-  })
-
   describe('User Manager', () => {
     let userService
-    before(() => {
+    before(async () => {
+      // make sure the correct options are set
+      app.set('auth0options', {
+        domain: 'example.auth0.com',
+        clientId: 'your_client_id',
+        clientSecret: 'your_client_secret'
+      })
+      // initialize the Auth0 Management client
+      app.configure(adapter({ auth0Client: mockAuth0Client }))
       // configure the users service
       userService = app.service('/auth0/users')
+      // make sure it is setup
+      await userService.setup(app)
     })
 
     describe('find()', () => {
@@ -637,9 +617,19 @@ describe('The FeathersJS Auth0 Management API Service', () => {
 
   describe('Tickets Manager', () => {
     let ticketsService
-    before(() => {
+    before(async () => {
+      // make sure the correct options are set
+      app.set('auth0options', {
+        domain: 'example.auth0.com',
+        clientId: 'your_client_id',
+        clientSecret: 'your_client_secret'
+      })
+      // initialize the Auth0 Management client
+      app.configure(adapter({ auth0Client: mockAuth0Client }))
       // configure the tickets service
       ticketsService = app.service('/auth0/tickets')
+      // make sure it is setup
+      await ticketsService.setup(app)
     })
 
     describe('find()', () => {

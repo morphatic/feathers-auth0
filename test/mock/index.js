@@ -18,6 +18,8 @@ module.exports = function (creds) {
       getAccessToken: () => {
         if (creds.clientSecret === 'a_bad_secret') {
           return Promise.reject(Error('Something bad happened'))
+        } else if (creds.clientSecret === 'scope_error') {
+          return Promise.reject(Error('Getting scopes failed'))
         } else {
           return Promise.resolve(mockToken)
         }

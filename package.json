@@ -1,6 +1,6 @@
 {
   "name": "@morphatic/feathers-auth0",
-  "version": "0.3.0",
+  "version": "0.0.0-development",
   "private": false,
   "description": "A FeathersJS service adapter for Auth0.",
   "main": "lib/",
@@ -15,11 +15,12 @@
     "release:minor": "npm version minor && npm publish --access public",
     "release:major": "npm version major && npm publish --access public",
     "test": "npm run eslint && nyc npm run mocha",
-    "watch": "mocha --watch --recursive './test/**/*.test.js'"
+    "watch": "mocha --watch --recursive './test/**/*.test.js'",
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/morphatic/feathers-auth0.git"
+    "url": "https://github.com/morphatic/feathers-auth0.git"
   },
   "keywords": [
     "feathers",
@@ -40,12 +41,14 @@
     "@feathersjs/feathers": "^4.3.0-pre.2",
     "chai": "^4.2.0",
     "chance": "^1.0.18",
+    "cz-conventional-changelog": "^3.0.2",
     "deep-equal": "^1.0.1",
     "eslint": "^5.16.0",
     "faker": "^4.1.0",
     "json-schema-faker": "^0.5.0-rc17",
     "mocha": "^6.2.0",
-    "nyc": "^14.1.1"
+    "nyc": "^14.1.1",
+    "semantic-release": "^15.13.24"
   },
   "dependencies": {
     "auth0": "^2.18.0",
@@ -60,5 +63,10 @@
   },
   "engines": {
     "node": ">=8"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

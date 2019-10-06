@@ -540,7 +540,7 @@ describe('The FeathersJS Auth0 Management API Service', () => {
         } catch (err) { message = err.message }
         expect(message).to.equal('Patching multiple users is not permitted.')
         // set the setting back to what they were
-        userService.multi = multi
+        userService.multi = multi // eslint-disable-line require-atomic-updates
       })
 
       it('it will patch an individual user and return the updated user', async () => {
@@ -562,7 +562,7 @@ describe('The FeathersJS Auth0 Management API Service', () => {
         )
         expect(result).to.deep.equal(patched_users)
         // set the setting back to what they were
-        userService.multi = multi
+        userService.multi = multi // eslint-disable-line require-atomic-updates
       })
     })
 
@@ -617,7 +617,7 @@ describe('The FeathersJS Auth0 Management API Service', () => {
         } catch (err) { message = err.message }
         expect(message).to.equal('Removing multiple users is not permitted.')
         // set the setting back to what they were
-        userService.multi = multi
+        userService.multi = multi // eslint-disable-line require-atomic-updates
       })
 
       it('will delete multiple users if query params are passed and return the removed users', async () => {
@@ -630,7 +630,7 @@ describe('The FeathersJS Auth0 Management API Service', () => {
         const result = await userService.remove(null, { query: { last_login: { $lt: june10th2019 } } })
         expect(result).to.deep.equal(removed_users)
         // set the setting back to what they were
-        userService.multi = multi
+        userService.multi = multi // eslint-disable-line require-atomic-updates
       })
     })
   })

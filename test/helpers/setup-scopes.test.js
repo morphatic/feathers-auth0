@@ -24,7 +24,7 @@ describe('setupScopes() helper function', () => {
     // parse the mocked scopes we're using for the test
     const scopes = allScopesJWT.payload.scope.split(' ')
     // call the function we're testing
-    await setupScopes(app)
+    await setupScopes({ app })
     // then get the scopes set in the app config
     const auth0Scopes = app.get('auth0Scopes')
     // and check to see that they are what we expect
@@ -44,7 +44,7 @@ describe('setupScopes() helper function', () => {
     app.set('auth0Scopes', undefined)
     try {
       // call the function we're testing
-      await setupScopes(app)
+      await setupScopes({ app })
       expect.fail('Should never get here')
     } catch (error) {
       expect(error.message).to.equal('Could not get access token and set scopes.')

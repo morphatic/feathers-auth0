@@ -48,7 +48,7 @@
     "json-schema-faker": "^0.5.0-rc19",
     "mocha": "^6.2.1",
     "nyc": "^14.1.1",
-    "semantic-release": "^15.13.24"
+    "semantic-release": "^17.2.3"
   },
   "dependencies": {
     "auth0": "^2.20.0",

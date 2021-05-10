@@ -43,7 +43,7 @@
     "chance": "^1.1.0",
     "cz-conventional-changelog": "^3.0.2",
     "deep-equal": "^1.1.0",
-    "eslint": "^6.5.1",
+    "eslint": "^7.26.0",
     "faker": "^4.1.0",
     "json-schema-faker": "^0.5.0-rc19",
     "mocha": "^6.2.1",

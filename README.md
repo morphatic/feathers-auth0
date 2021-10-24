@@ -8,8 +8,6 @@
 
 Creates the services necessary to use the [Auth0 Management API](https://auth0.com/docs/api/management/v2) with [FeathersJS](https://feathersjs.com).
 
-:warning: **This package is designed to work with the [FeatherJS v4.0 (Crow)](https://crow.docs.feathersjs.com/), currently (2019-08-02) in pre-release.** :warning:
-
 This package will **probably** work with older versions of FeathersJS, but if all you need is the Users API, you can install version 0.1.4.
 
 ## Installation

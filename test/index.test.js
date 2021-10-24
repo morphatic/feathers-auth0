@@ -1,5 +1,4 @@
 const fs = require('fs')
-const { inspect } = require('util') // eslint-disable-line
 const { expect } = require('chai')
 const feathers = require('@feathersjs/feathers')
 const config = require('@feathersjs/configuration')
@@ -573,7 +572,7 @@ describe('The FeathersJS Auth0 Management API Service', () => {
       it('will throw an error if an id is not passed', async () => {
         let message
         try { await userService.remove() } catch (err) { message = err.message }
-        expect(message).to.equal('An id must be provided to the \'remove\' method')
+        expect(message).to.equal('An id must be provided to the \'auth0/users.remove\' method')
       })
 
       it('will remove the user by user_id and return the removed user', async () => {

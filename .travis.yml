@@ -3,7 +3,7 @@ node_js:
   - 'lts/*'
   - '12'
 before_install:
-  - npm i -g nyc coveralls commitizen
+  - npm i -g nyc coveralls
 script:
   - npm test
 after_success:

@@ -62,11 +62,11 @@
     "lib": "lib"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=12"
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "cz-conventional-changelog"
     }
   }
 }

@@ -1,5 +1,4 @@
 const fs = require('fs')
-const { inspect } = require('util') // eslint-disable-line
 const { expect } = require('chai')
 const feathers = require('@feathersjs/feathers')
 const config = require('@feathersjs/configuration')

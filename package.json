@@ -41,7 +41,6 @@
     "@feathersjs/feathers": "^4.3.4",
     "chai": "^4.2.0",
     "chance": "^1.1.0",
-    "cz-conventional-changelog": "^3.3.0",
     "deep-equal": "^2.0.5",
     "eslint": "^7.32.0",
     "faker": "^4.1.0",
@@ -53,6 +52,7 @@
   "dependencies": {
     "auth0": "^2.20.0",
     "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
     "deepmerge": "^4.0.0",
     "fast-sort": "^1.6.0",
     "jsonwebtoken": "^8.5.1",
